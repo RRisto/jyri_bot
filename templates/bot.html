@@ -1,0 +1,47 @@
+<link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet" id="bootstrap-css">
+<script src="{{ url_for('static', filename='bootstrap.min.js') }} "></script>
+<script src="{{ url_for('static', filename='jquery-1.11.1.min.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }} ">
+<!------ Include the above in your HEAD tag ---------->
+
+<!DOCTYPE html>
+<html>
+    <body>
+        <div class="col-sm-3 col-sm-offset-4 frame" style="height:600">
+            <ul></ul>
+            <div>
+                <div class="msj-rta macro">                        
+                    <div class="text text-r" style="background:whitesmoke !important">
+                        <input class="mytext" placeholder="Type a message"/>
+                    </div> 
+
+                </div>
+                <div style="padding:10px;">
+                    <span class="glyphicon glyphicon-share-alt"></span>
+                </div>                
+            </div>
+        </div>       
+    </body>
+</html>
+
+<script src="{{ url_for('static', filename='custom.js') }}"></script>
+
+<script type="text/javascript">
+$(".mytext").on("keydown", function(e){
+    if (e.which == 13){
+        var text = $(this).val();
+        if (text !== ""){
+            insertChat("me", text);
+
+            $.get("{{ url_for('.get_jyri_answer') }}?text=" + text, function (data) {
+                    var response = data;
+                    console.log(response);
+                    insertChat("jyri", response);
+                        });
+
+            $(this).val('');
+        }
+    }
+});
+</script>
+

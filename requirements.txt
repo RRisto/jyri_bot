@@ -1,0 +1,7 @@
+Flask==1.1.1
+numpy
+pandas==0.24.2
+regex==2019.04.14
+spacy==2.1.0
+torchtext==0.3.1
+dill
