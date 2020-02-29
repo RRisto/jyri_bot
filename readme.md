@@ -2,7 +2,7 @@
 Bot trained on Jüri Ratas (currently Estonian Prime Minister) interviews and talks in Riigikogu
  (also from times when Jüri was not Prime Minister). 
  
-![Jüri Ratas](https://github.com/RRisto/jyri_bot/blob/master/static/ratas_small.png) 
+![Jüri Ratas](https://github.com/RRisto/jyri_bot/blob/master/static/ratas_small.png "Jüri Ratas") 
  
 Bot is using transformer architecture. 
 Data used for training model is not comprehensive. 
