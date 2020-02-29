@@ -63,11 +63,6 @@ class Trainer:
         pickle.dump(self.SRC, open(f'{self.model_save_dir}/SRC.pkl', 'wb'))
         pickle.dump(self.TRG, open(f'{self.model_save_dir}/TRG.pkl', 'wb'))
 
-        # if self.load_weights is not None:
-        #   os.mkdir('weights')
-        #  pickle.dump(self.SRC, open(f'{self.self.model_save_dir}/SRC.pkl', 'wb'))
-        # pickle.dump(self.TRG, open(f'{self.self.model_save_dir}/TRG.pkl', 'wb'))
-
         print("training model...")
         start = time.time()
         if self.checkpoint > 0:
@@ -190,6 +185,7 @@ class Trainer:
 
     def fix_punctuation(self, text):
         text = re.sub(r'\s([?.,!"](?:\s|$))', r'\1', text)
+        text = re.sub(' +', ' ', text)
         return text
 
     def predict(self, sentence, fix_punctuation=True):
@@ -202,7 +198,7 @@ class Trainer:
                 if self.SRC.vocab.stoi[tok] != 0:
                     print(f' token i {self.SRC.vocab.stoi[tok]}')
                     indexed.append(self.SRC.vocab.stoi[tok])
-            #this is quick fix some reason is crashes in flask app context if finds token not in vocab, instead of returning 0
+            # this is quick fix some reason is crashes in flask app context if finds token not in vocab, instead of returning 0
             except Exception as e:
                 indexed.append(0)
         sentence = Variable(torch.LongTensor([indexed]))
@@ -247,7 +243,6 @@ class Trainer:
     @staticmethod
     def load_model(folder, device='cpu'):
         folder = Path(folder)
-        # model=torch.load(folder/'model_object.pth')
         params = torch.load(folder / 'model_params.pth')
         model = Trainer(params.get('src_train_data_path'), params.get('trg_train_data_path'),
                         params.get('src_valid_data_path'),
