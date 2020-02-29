@@ -1,11 +1,15 @@
-![alt text](https://github.com/RRisto/jyri_bot/blob/master/static/ratas_small.png)
-
 ## Jüri Ratas bot
 Bot trained on Jüri Ratas (currently Estonian Prime Minister) interviews and talks in Riigikogu
- (also from times when Jüri was not Prime Minister) and using transformer architecture. 
-Data used for training model is not comprehensive.
+ (also from times when Jüri was not Prime Minister). 
+ 
+![Jüri Ratas](https://github.com/RRisto/jyri_bot/blob/master/static/ratas_small.png) 
+ 
+Bot is using transformer architecture. 
+Data used for training model is not comprehensive. 
+Mostly collected manually and using API for Riigikogu.
 Goal of this project is to have some fun and see if sequnece2sequence model could give 
-human like answers.
+human like answers. As Jüri is knwon for not giving direct answers some of the bot answers are not 
+very different what you might when interviewing him.
 
 ### Train model
 To train model use notebook 0.1_prepare_jyri_data.ipynb to prepare data and 
