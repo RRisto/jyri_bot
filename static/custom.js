@@ -1,9 +1,7 @@
 var me = {};
-// me.avatar = "{{ url_for('static', filename='face.png') }}";
 me.avatar = "/static/face.png";
 
 var you = {};
-//you.avatar = "{{ url_for('static', filename='ratas_small.png') }}";
 you.avatar = "/static/ratas_small.png";
 
 function formatAMPM(date) {
@@ -68,12 +66,6 @@ $('body > div > div > div:nth-child(2) > span').click(function(){
 resetChat();
 
 //-- Print Messages
-//insertChat("me", "Hello Tom...", 0);
-insertChat("jyri", "Tere! Olen Jüri Ratas, Eesti Vabariigi peaminister. Küsi minult midagi", 0);
-//insertChat("me", "What would you like to talk about today?", 3500);
-//insertChat("you", "Tell me a joke",7000);
-//insertChat("me", "Spaceman: Computer! Computer! Do we bring battery?!", 9500);
-//insertChat("you", "LOL", 12000);
-
+insertChat("jyri", "Tere! Olen Jüri Ratas, Eesti Vabariigi peaminister. Küsi julgelt. Ma vastan veidi aeglaselt, kuid vastan kindlasti.", 0);
 
 //-- NOTE: No use time on insertChat.
