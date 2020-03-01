@@ -14,7 +14,8 @@ very different what you might when interviewing him.
 ### Train model
 To train model use notebook 0.1_prepare_jyri_data.ipynb to prepare data and 
 notebook 0.2_train_jyri.ipynb to train model.
-Use GPU to seed up training. NB! in requirements.txt there is only CPU version of pytorch ()
+Use GPU to seed up training. NB! in requirements.txt there is only CPU version of pytorch,
+ you have to install GPU version for training. Model training was done using python 3.6.6. 
 
 ### Use bot
 To use bot have model files in models sub folder. Use build_dev.bat (you need to convert it.sh files
