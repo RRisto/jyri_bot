@@ -144,6 +144,7 @@ class Trainer:
 
     def beam_search(self, src, k=3, max_len=80):
         src = src.to(self.device)
+        self.model.eval()
         outputs, e_outputs, log_scores = self.init_vars(src, k, max_len)
         eos_tok = self.TRG.vocab.stoi['<eos>']
         src_mask = (src != self.SRC.vocab.stoi['<pad>']).unsqueeze(-2).to(self.device)
