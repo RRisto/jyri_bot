@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 from torchtext import data
-from .Tokenize import tokenize
+from .Tokenizer import Tokenizer
 from .Batch import MyIterator, batch_size_fn
 import dill as pickle
 
@@ -23,17 +23,11 @@ def read_data(src_data_path, trg_data_path):
     return src_data, trg_data
 
 
-def create_fields(src_lang, trg_lang, load_weights=None):
-    spacy_langs = ['en', 'fr', 'de', 'es', 'pt', 'it', 'nl']
-    if src_lang not in spacy_langs:
-        print('invalid src language: ' + src_lang + 'supported languages : ' + spacy_langs)
-    if trg_lang not in spacy_langs:
-        print('invalid trg language: ' + trg_lang + 'supported languages : ' + spacy_langs)
+def create_fields(src_tokenizer_path, trg_tokenizer_path, load_weights=None):
+    print("loading tokenizers...")
 
-    print("loading spacy tokenizers...")
-
-    t_src = tokenize(src_lang)
-    t_trg = tokenize(trg_lang)
+    t_src = Tokenizer(src_tokenizer_path)
+    t_trg = Tokenizer(trg_tokenizer_path)
 
     TRG = data.Field(lower=True, tokenize=t_trg.tokenizer, init_token='<sos>', eos_token='<eos>')
     SRC = data.Field(lower=True, tokenize=t_src.tokenizer)
@@ -67,6 +61,7 @@ def create_dataset(src_train_data, trg_train_data, src_valid_data, trg_valid_dat
     df_valid.to_csv("translate_transformer_valid_temp.csv", index=False)
 
     data_fields = [('src', SRC), ('trg', TRG)]
+    # train = data.TabularDataset('./translate_transformer_temp.csv', format='csv', fields=data_fields)
 
     train, valid = data.TabularDataset.splits(path='', train='translate_transformer_train_temp.csv',
                                               validation='translate_transformer_valid_temp.csv', format='csv',

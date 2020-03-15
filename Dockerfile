@@ -20,8 +20,6 @@ ENV LANG C.UTF-8
 COPY requirements.txt /opt
 RUN pip install -r /opt/requirements.txt
 
-RUN python -m spacy download en
-
 RUN mkdir -p /opt/bot
 
 WORKDIR /opt/bot

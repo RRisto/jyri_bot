@@ -10,15 +10,15 @@ import dill as pickle
 
 
 class Trainer:
-    def __init__(self, src_train_data_path, trg_train_data_path, src_valid_data_path, trg_valid_data_path, src_lang,
-                 trg_lang, max_strlen, batchsize, load_weights, checkpoint, device, train, valid, src_pad, trg_pad, SRC,
+    def __init__(self, src_train_data_path, trg_train_data_path, src_valid_data_path, trg_valid_data_path, src_tokenizer_path,
+                 trg_tokenizer_path, max_strlen, batchsize, load_weights, checkpoint, device, train, valid, src_pad, trg_pad, SRC,
                  TRG, train_len, valid_len):
         self.src_train_data_path = src_train_data_path
         self.trg_train_data_path = trg_train_data_path
         self.src_valid_data_path = src_valid_data_path
         self.trg_valid_data_path = trg_valid_data_path
-        self.src_lang = src_lang
-        self.trg_lang = trg_lang
+        self.src_tokenizer_path = src_tokenizer_path
+        self.trg_tokenizer_path = trg_tokenizer_path
         self.max_strlen = max_strlen
         self.batchsize = batchsize
         self.load_weights = load_weights
@@ -169,7 +169,7 @@ class Trainer:
         if len(lengths) == 0:  # there isn't any eos token, take till padding starts
             lengths = reversed((outputs[ind]).nonzero())
         length = lengths[0]
-        return ' '.join([self.TRG.vocab.itos[tok] for tok in outputs[ind][1:length]])
+        return ''.join([self.TRG.vocab.itos[tok] for tok in outputs[ind][1:length]]).replace('▁', ' ')
 
     def k_best_outputs(self, outputs, out, log_scores, i, k):
 
@@ -194,10 +194,8 @@ class Trainer:
         indexed = []
         sentence = self.SRC.preprocess(sentence)
         for tok in sentence:
-            print(f'token {tok}')
             try:
                 if self.SRC.vocab.stoi[tok] != 0:
-                    print(f' token i {self.SRC.vocab.stoi[tok]}')
                     indexed.append(self.SRC.vocab.stoi[tok])
             # this is quick fix some reason is crashes in flask app context if finds token not in vocab, instead of returning 0
             except Exception as e:
@@ -213,8 +211,8 @@ class Trainer:
                'trg_train_data_path': self.trg_train_data_path,
                'src_valid_data_path': self.src_valid_data_path,
                'trg_valid_data_path': self.trg_valid_data_path,
-               'src_lang': self.src_lang,
-               'trg_lang': self.trg_lang,
+               'src_tokenizer_path': self.src_tokenizer_path,
+               'trg_tokenizer_path': self.trg_tokenizer_path,
                'max_strlen': self.max_strlen,
                'batchsize': self.batchsize,
                'load_weights': self.load_weights,
@@ -247,8 +245,8 @@ class Trainer:
         params = torch.load(folder / 'model_params.pth')
         model = Trainer(params.get('src_train_data_path'), params.get('trg_train_data_path'),
                         params.get('src_valid_data_path'),
-                        params.get('trg_valid_data_path'), params.get('src_lang'),
-                        params.get('trg_lang'), params.get('max_strlen'), params.get('batchsize'),
+                        params.get('trg_valid_data_path'), params.get('src_tokenizer_path'),
+                        params.get('trg_tokenizer_path'), params.get('max_strlen'), params.get('batchsize'),
                         params.get('load_weights'),
                         params.get('checkpoint'), device, params.get('train'), params.get('valid'),
                         params.get('src_pad'), params.get('trg_pad'), params.get('SRC'),
@@ -265,15 +263,15 @@ class Trainer:
 
     @classmethod
     def create_from_txt(cls, src_train_data_path, trg_train_data_path, src_valid_data_path, trg_valid_data_path,
-                        src_lang, trg_lang, max_strlen, batchsize, load_weights, checkpoint, device):
+                        src_tokenizer_path, trg_tokenizer_path, max_strlen, batchsize, load_weights, checkpoint, device):
         src_train_data, trg_train_data = read_data(src_train_data_path, trg_train_data_path)
         src_valid_data, trg_valid_data = read_data(src_valid_data_path, trg_valid_data_path)
-        SRC, TRG = create_fields(src_lang, trg_lang, load_weights)
+        SRC, TRG = create_fields(src_tokenizer_path, trg_tokenizer_path, load_weights)
         train, valid, src_pad, trg_pad, train_len, valid_len = create_dataset(src_train_data, trg_train_data,
                                                                               src_valid_data,
                                                                               trg_valid_data, SRC, TRG, max_strlen,
                                                                               batchsize, device)
 
-        return cls(src_train_data_path, trg_train_data_path, src_valid_data_path, trg_valid_data_path, src_lang,
-                   trg_lang, max_strlen, batchsize, load_weights, checkpoint, device, train, valid, src_pad,
+        return cls(src_train_data_path, trg_train_data_path, src_valid_data_path, trg_valid_data_path, src_tokenizer_path,
+                   trg_tokenizer_path, max_strlen, batchsize, load_weights, checkpoint, device, train, valid, src_pad,
                    trg_pad, SRC, TRG, train_len, valid_len)

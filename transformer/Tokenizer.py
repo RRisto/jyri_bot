@@ -1,10 +1,15 @@
-import spacy, re
+import re
+import sentencepiece as spm
 
+st = spm.SentencePieceProcessor()
+st.Load('tokenizers/bpe_vocab_size_10000_norm_identity.model')
 
-class tokenize(object):
+class Tokenizer(object):
 
-    def __init__(self, lang):
-        self.nlp = spacy.load(lang)
+    def __init__(self, tokenizer_path):
+        pass
+        #self.st=st
+        #self.st.Load(tokenizer_path)
 
     def tokenizer(self, sentence):
         sentence = re.sub(
@@ -14,4 +19,4 @@ class tokenize(object):
         sentence = re.sub(r"\,+", ",", sentence)
         sentence = re.sub(r"\?+", "?", sentence)
         sentence = sentence.lower()
-        return [tok.text for tok in self.nlp.tokenizer(sentence) if tok.text != " "]
+        return st.EncodeAsPieces(sentence)
